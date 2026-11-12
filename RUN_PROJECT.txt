@@ -1,0 +1,22 @@
+HOW TO RUN (WINDOWS / VS CODE)
+
+1. Extract the ZIP file.
+2. Open the extracted folder in VS Code.
+3. Open Terminal > New Terminal.
+4. Compile:
+   javac ElectricityBillGenerator.java ElectricityBillWebServer.java
+5. Start Java backend:
+   java ElectricityBillWebServer
+6. Open this in Chrome:
+   http://localhost:8080
+
+If port 8080 is busy, use: java ElectricityBillWebServer 8081
+Then open: http://localhost:8081
+7. Enter customer details and click Calculate Bill.
+
+IMPORTANT: Keep the VS Code terminal open while using the website.
+Stop the server with Ctrl + C.
+
+To run the original console project instead:
+   javac ElectricityBillGenerator.java
+   java ElectricityBillGenerator

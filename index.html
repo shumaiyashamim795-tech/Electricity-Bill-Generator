@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electricity Bill Generator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-mark">⚡</div>
+    <div><h1>Electricity Bill Generator</h1><p>Simple electricity billing system</p></div>
+  </header>
+  <main class="container">
+    <section class="intro">
+      <h2>Generate Your Electricity Bill</h2>
+      <p>Enter the consumer details below and calculate the bill.</p>
+    </section>
+    <div class="layout">
+      <section class="panel">
+        <h3>Consumer Information</h3>
+        <form id="billForm">
+          <label for="consumerId">Consumer ID</label>
+          <input id="consumerId" name="consumerId" type="text" placeholder="e.g. CSE101" required>
+          <label for="name">Customer Name</label>
+          <input id="name" name="name" type="text" placeholder="Enter customer name" required>
+          <label for="address">Address</label>
+          <textarea id="address" name="address" rows="2" placeholder="Enter full address" required></textarea>
+          <label for="meterNumber">Meter Number</label>
+          <input id="meterNumber" name="meterNumber" type="text" placeholder="e.g. MTR202601" required>
+          <label for="units">Units Consumed</label>
+          <input id="units" name="units" type="number" min="0" step="1" placeholder="Enter units consumed" required>
+          <button type="submit" id="calculateBtn">Calculate Bill</button>
+          <p class="message" id="message" role="alert"></p>
+        </form>
+      </section>
+      <section class="panel result-panel">
+        <h3>Bill Summary</h3>
+        <div id="emptyState" class="empty-state"><div class="receipt-icon">▤</div><p>Your bill details will appear here after calculation.</p></div>
+        <div id="billResult" class="bill-result" hidden>
+          <div class="bill-heading"><span>Electricity Bill</span><span class="status">Calculated</span></div>
+          <div class="customer-details" id="customerDetails"></div>
+          <div class="charge-row"><span>Units Consumed</span><strong id="resultUnits">0</strong></div>
+          <div class="charge-row"><span>Energy Charge</span><strong id="energyCharge">₹0.00</strong></div>
+          <div class="charge-row"><span>Fixed Charge</span><strong id="fixedCharge">₹50.00</strong></div>
+          <div class="total-row"><span>Total Amount</span><strong id="totalAmount">₹0.00</strong></div>
+          <button type="button" class="print-btn" id="printBtn">Print Bill</button>
+          <p class="note">* Sample academic tariff rates are used for this project.</p>
+        </div>
+      </section>
+    </div>
+    <section class="rate-note"><strong>Tariff slabs used:</strong> First 100 units – ₹3.50/unit | 101–200 – ₹5.00/unit | 201–300 – ₹6.50/unit | Above 300 – ₹8.00/unit | Fixed charge – ₹50</section>
+    <footer>Object Oriented Programming Mini Project · PCCCS593 · Java</footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

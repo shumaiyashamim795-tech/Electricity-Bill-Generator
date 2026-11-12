@@ -1,57 +1,343 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Electricity Bill Generator</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoltEdge | Electricity Management</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand-mark">⚡</div>
-    <div><h1>Electricity Bill Generator</h1><p>Simple electricity billing system</p></div>
-  </header>
-  <main class="container">
-    <section class="intro">
-      <h2>Generate Your Electricity Bill</h2>
-      <p>Enter the consumer details below and calculate the bill.</p>
-    </section>
-    <div class="layout">
-      <section class="panel">
-        <h3>Consumer Information</h3>
-        <form id="billForm">
-          <label for="consumerId">Consumer ID</label>
-          <input id="consumerId" name="consumerId" type="text" placeholder="e.g. CSE101" required>
-          <label for="name">Customer Name</label>
-          <input id="name" name="name" type="text" placeholder="Enter customer name" required>
-          <label for="address">Address</label>
-          <textarea id="address" name="address" rows="2" placeholder="Enter full address" required></textarea>
-          <label for="meterNumber">Meter Number</label>
-          <input id="meterNumber" name="meterNumber" type="text" placeholder="e.g. MTR202601" required>
-          <label for="units">Units Consumed</label>
-          <input id="units" name="units" type="number" min="0" step="1" placeholder="Enter units consumed" required>
-          <button type="submit" id="calculateBtn">Calculate Bill</button>
-          <p class="message" id="message" role="alert"></p>
-        </form>
-      </section>
-      <section class="panel result-panel">
-        <h3>Bill Summary</h3>
-        <div id="emptyState" class="empty-state"><div class="receipt-icon">▤</div><p>Your bill details will appear here after calculation.</p></div>
-        <div id="billResult" class="bill-result" hidden>
-          <div class="bill-heading"><span>Electricity Bill</span><span class="status">Calculated</span></div>
-          <div class="customer-details" id="customerDetails"></div>
-          <div class="charge-row"><span>Units Consumed</span><strong id="resultUnits">0</strong></div>
-          <div class="charge-row"><span>Energy Charge</span><strong id="energyCharge">₹0.00</strong></div>
-          <div class="charge-row"><span>Fixed Charge</span><strong id="fixedCharge">₹50.00</strong></div>
-          <div class="total-row"><span>Total Amount</span><strong id="totalAmount">₹0.00</strong></div>
-          <button type="button" class="print-btn" id="printBtn">Print Bill</button>
-          <p class="note">* Sample academic tariff rates are used for this project.</p>
+
+<div class="app">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">ϟ</div>
+            <div>
+                <h2>VoltEdge</h2>
+                <small>POWER MANAGEMENT</small>
+            </div>
         </div>
-      </section>
-    </div>
-    <section class="rate-note"><strong>Tariff slabs used:</strong> First 100 units – ₹3.50/unit | 101–200 – ₹5.00/unit | 201–300 – ₹6.50/unit | Above 300 – ₹8.00/unit | Fixed charge – ₹50</section>
-    <footer>Object Oriented Programming Mini Project · PCCCS593 · Java</footer>
-  </main>
-  <script src="script.js"></script>
+
+        <div class="nav-label">WORKSPACE</div>
+
+        <nav>
+            <button class="nav-link active" data-page="dashboard">
+                <span>◫</span> Dashboard
+            </button>
+            <button class="nav-link" data-page="generate">
+                <span>＋</span> Generate Bill
+            </button>
+            <button class="nav-link" data-page="tariff">
+                <span>▤</span> Tariff Details
+            </button>
+            <button class="nav-link" data-page="history">
+                <span>◷</span> Bill History
+            </button>
+            <button class="nav-link" data-page="about">
+                <span>ⓘ</span> About Project
+            </button>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="system-card">
+                <div class="online-dot"></div>
+                <div>
+                    <strong>System Online</strong>
+                    <small>Billing module active</small>
+                </div>
+            </div>
+            <div class="sidebar-footer">OOP MINI PROJECT · PCCCS593</div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <div class="breadcrumb">WORKSPACE / <span id="breadcrumbName">DASHBOARD</span></div>
+                <h2 id="pageHeading">Dashboard Overview</h2>
+            </div>
+            <div class="top-actions">
+                <div class="live-status"><span></span> Live System</div>
+                <div class="avatar">VE</div>
+            </div>
+        </header>
+
+        <!-- DASHBOARD -->
+        <section class="page active" id="dashboard">
+            <div class="welcome-banner">
+                <div>
+                    <span class="eyebrow">ELECTRICITY BILLING SYSTEM</span>
+                    <h1>Powering your <span>management.</span></h1>
+                    <p>Manage consumers, calculate electricity charges and generate professional bills.</p>
+                    <button class="primary-btn" data-go="generate">＋ Generate New Bill</button>
+                </div>
+                <div class="hero-symbol">ϟ</div>
+            </div>
+
+            <div class="section-heading">
+                <div>
+                    <h3>System Overview</h3>
+                    <p>Your billing activity at a glance</p>
+                </div>
+                <span class="date-label" id="todayDate"></span>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon cyan">▤</div>
+                    <span>Total Bills Generated</span>
+                    <h2 id="statBills">0</h2>
+                    <small>Stored in this browser</small>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple">◉</div>
+                    <span>Total Units Consumed</span>
+                    <h2 id="statUnits">0</h2>
+                    <small>Units across saved bills</small>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">₹</div>
+                    <span>Total Bill Amount</span>
+                    <h2 id="statRevenue">₹0.00</h2>
+                    <small>Calculated bill value</small>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange">ϟ</div>
+                    <span>Fixed Charge</span>
+                    <h2>₹50</h2>
+                    <small>Per generated bill</small>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="content-card">
+                    <div class="card-heading">
+                        <div>
+                            <h3>Recent Bills</h3>
+                            <p>Latest generated electricity bills</p>
+                        </div>
+                        <button class="text-btn" data-go="history">View All →</button>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>CONSUMER</th>
+                                    <th>UNITS</th>
+                                    <th>AMOUNT</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentBills">
+                                <tr><td colspan="4" class="empty-table">No bills generated yet.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="content-card quick-card">
+                    <div class="card-heading">
+                        <div>
+                            <h3>Quick Actions</h3>
+                            <p>Access important features</p>
+                        </div>
+                    </div>
+                    <button class="quick-action" data-go="generate">
+                        <span class="quick-icon cyan">＋</span>
+                        <span><strong>Generate Bill</strong><small>Create a consumer bill</small></span>
+                        <span class="arrow">→</span>
+                    </button>
+                    <button class="quick-action" data-go="tariff">
+                        <span class="quick-icon purple">▤</span>
+                        <span><strong>View Tariff</strong><small>Check electricity rates</small></span>
+                        <span class="arrow">→</span>
+                    </button>
+                    <button class="quick-action" data-go="history">
+                        <span class="quick-icon green">◷</span>
+                        <span><strong>Bill History</strong><small>Review saved bills</small></span>
+                        <span class="arrow">→</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- GENERATE BILL -->
+        <section class="page" id="generate">
+            <div class="page-intro">
+                <span class="eyebrow">BILLING MODULE</span>
+                <h1>Generate Electricity Bill</h1>
+                <p>Enter the consumer information to calculate the electricity charges.</p>
+            </div>
+
+            <div class="billing-layout">
+                <section class="content-card form-card">
+                    <div class="card-heading">
+                        <div>
+                            <h3>Consumer Information</h3>
+                            <p>Enter all required consumer details</p>
+                        </div>
+                        <span class="step-tag">STEP 01</span>
+                    </div>
+
+                    <form id="billForm">
+                        <div class="form-grid">
+                            <div class="field">
+                                <label for="consumerId">Consumer ID</label>
+                                <input id="consumerId" name="consumerId" type="text" placeholder="e.g. CSE101" required>
+                            </div>
+                            <div class="field">
+                                <label for="name">Customer Name</label>
+                                <input id="name" name="name" type="text" placeholder="Enter full name" required>
+                            </div>
+                            <div class="field full">
+                                <label for="address">Residential Address</label>
+                                <textarea id="address" name="address" rows="3" placeholder="Enter complete address" required></textarea>
+                            </div>
+                            <div class="field">
+                                <label for="meterNumber">Meter Number</label>
+                                <input id="meterNumber" name="meterNumber" type="text" placeholder="e.g. MTR202601" required>
+                            </div>
+                            <div class="field">
+                                <label for="units">Units Consumed (kWh)</label>
+                                <input id="units" name="units" type="number" min="0" step="1" placeholder="Enter units" required>
+                            </div>
+                        </div>
+
+                        <div class="form-note">ⓘ All fields are required. Please verify the consumer information before calculating.</div>
+                        <button type="submit" id="calculateBtn" class="primary-btn calculate-btn">Calculate Electricity Bill →</button>
+                        <p class="message" id="message" role="alert"></p>
+                    </form>
+                </section>
+
+                <section class="content-card result-card">
+                    <div class="card-heading">
+                        <div>
+                            <h3>Bill Summary</h3>
+                            <p>Electricity charge breakdown</p>
+                        </div>
+                        <span class="step-tag">STEP 02</span>
+                    </div>
+
+                    <div id="emptyState" class="empty-state">
+                        <div class="empty-icon">▤</div>
+                        <h3>Awaiting Calculation</h3>
+                        <p>Your electricity bill will appear here after submitting the consumer information.</p>
+                    </div>
+
+                    <div id="billResult" class="bill-result" hidden>
+                        <div class="invoice-top">
+                            <div class="invoice-logo">ϟ</div>
+                            <div>
+                                <strong>VOLTEDGE</strong>
+                                <small>ELECTRICITY INVOICE</small>
+                            </div>
+                            <span class="status">CALCULATED</span>
+                        </div>
+
+                        <div class="invoice-id" id="invoiceDate"></div>
+                        <div class="customer-details" id="customerDetails"></div>
+
+                        <div class="bill-divider"></div>
+                        <div class="charge-row"><span>Units Consumed</span><strong id="resultUnits">0</strong></div>
+                        <div class="charge-row"><span>Energy Charge</span><strong id="energyCharge">₹0.00</strong></div>
+                        <div class="charge-row"><span>Fixed Charge</span><strong id="fixedCharge">₹50.00</strong></div>
+                        <div class="total-row"><span>Total Amount</span><strong id="totalAmount">₹0.00</strong></div>
+
+                        <button type="button" class="print-btn" id="printBtn">▣ Print Electricity Bill</button>
+                        <p class="note">* Sample academic tariff rates are used for this project.</p>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <!-- TARIFF -->
+        <section class="page" id="tariff">
+            <div class="page-intro">
+                <span class="eyebrow">PRICING INFORMATION</span>
+                <h1>Electricity Tariff Details</h1>
+                <p>View the sample electricity rates used by the billing module.</p>
+            </div>
+
+            <div class="content-card">
+                <div class="card-heading">
+                    <div><h3>Domestic Tariff Structure</h3><p>Progressive unit-based pricing</p></div>
+                    <span class="step-tag">ACADEMIC MODEL</span>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>SLAB</th><th>UNIT RANGE</th><th>RATE PER UNIT</th></tr></thead>
+                        <tbody>
+                            <tr><td>01</td><td>0–100 units</td><td class="rate">₹3.50</td></tr>
+                            <tr><td>02</td><td>101–200 units</td><td class="rate">₹5.00</td></tr>
+                            <tr><td>03</td><td>201–300 units</td><td class="rate">₹6.50</td></tr>
+                            <tr><td>04</td><td>Above 300 units</td><td class="rate">₹8.00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="fixed-charge-box">
+                    <div class="stat-icon orange">₹</div>
+                    <div><small>MONTHLY FIXED CHARGE</small><h2>₹50.00</h2></div>
+                </div>
+                <p class="note">These are sample academic rates, not official electricity provider tariffs.</p>
+            </div>
+        </section>
+
+        <!-- HISTORY -->
+        <section class="page" id="history">
+            <div class="page-intro">
+                <span class="eyebrow">RECORD MANAGEMENT</span>
+                <h1>Bill History</h1>
+                <p>Review electricity bills generated in this browser.</p>
+            </div>
+            <div class="content-card">
+                <div class="card-heading">
+                    <div><h3>Generated Records</h3><p>Your saved billing activity</p></div>
+                    <button class="text-btn" id="clearHistoryBtn">Clear History</button>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>DATE</th><th>CONSUMER</th><th>UNITS</th><th>ENERGY</th><th>TOTAL</th></tr></thead>
+                        <tbody id="historyTable">
+                            <tr><td colspan="5" class="empty-table">No bill records available.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section class="page" id="about">
+            <div class="page-intro">
+                <span class="eyebrow">PROJECT INFORMATION</span>
+                <h1>About This Project</h1>
+                <p>Understanding the system and its object-oriented programming foundation.</p>
+            </div>
+            <div class="content-card about-card">
+                <div class="about-symbol">ϟ</div>
+                <h2>Electricity Bill Generator</h2>
+                <p>A mini project developed as part of the Object Oriented Programming course. It demonstrates consumer data management and electricity bill calculation using a sample progressive tariff structure.</p>
+                <div class="tech-grid">
+                    <div><strong>Java</strong><small>OOP implementation</small></div>
+                    <div><strong>HTML & CSS</strong><small>Frontend interface</small></div>
+                    <div><strong>JavaScript</strong><small>Bill calculation</small></div>
+                    <div><strong>GitHub Pages</strong><small>Frontend hosting</small></div>
+                </div>
+                <div class="project-label">COURSE CODE: PCCCS593 · OBJECT ORIENTED PROGRAMMING</div>
+            </div>
+        </section>
+
+        <footer class="main-footer">
+            <span>VoltEdge Electricity Management System</span>
+            <span>OOP MINI PROJECT · PCCCS593</span>
+        </footer>
+    </main>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
